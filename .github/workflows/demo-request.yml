@@ -1,0 +1,24 @@
+name: Demo request
+
+on:
+  workflow_dispatch:
+    inputs:
+      issue:
+        description: Issue number to comment on
+        required: true
+      message:
+        description: Comment body
+        required: true
+
+jobs:
+  comment:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - run: gh issue comment "$ISSUE" -R "$REPO" -b "$MESSAGE"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE: ${{ inputs.issue }}
+          MESSAGE: ${{ inputs.message }}
+          REPO: ${{ github.repository }}
